@@ -1,0 +1,107 @@
+<div class="completed-tasks-container">
+  <div class="completed-tasks-content">
+    <!-- Header -->
+    <div class="page-header">
+      <h1 class="page-title">Completed Tasks</h1>
+      <p class="page-description">Tasks completed this week and recently closed items</p>
+    </div>
+
+    <!-- Back Navigation -->
+    <div class="back-navigation">
+      <a routerLink="/" class="back-link">← Back to Dashboard</a>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading()" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading completed tasks...</p>
+    </div>
+
+    <!-- Completed Tasks Table -->
+    <div *ngIf="!isLoading()" class="tasks-table-container">
+      <div class="table-header">
+        <h2 class="section-title">Recently Completed Tasks</h2>
+        <div class="table-stats">
+          <span class="stat-badge success">{{ completedTasks().length }} Completed</span>
+        </div>
+      </div>
+
+      <table class="tasks-table" *ngIf="completedTasks().length > 0; else noCompletedTasks">
+        <thead>
+          <tr>
+            <th>Account Name</th>
+            <th>NAIC Description</th>
+            <th>LOB/Products</th>
+            <th>Transaction Type</th>
+            <th>Propensity to bind</th>
+            <th>Premium</th>
+            <th>Completed Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of completedTasks()" class="task-row completed-row">
+            <td class="account-name">
+              <div class="priority-flag" *ngIf="task.priority">🏳️</div>
+              <div class="task-info">
+                <span class="task-name">{{ task.accountName }}</span>
+                <small class="task-id">
+                  <a [routerLink]="['/task-detail', task.id]" class="task-link">{{ task.id }}</a>
+                </small>
+              </div>
+            </td>
+            <td class="naic-desc">{{ task.naicDescription }}</td>
+            <td class="lob-products">{{ task.lobProducts }}</td>
+            <td class="transaction-type">{{ task.transactionType }}</td>
+            <td>
+              <span class="propensity-badge" [ngClass]="getPropensityClass(task.propensityToBind)">
+                {{ task.propensityToBind }}
+              </span>
+            </td>
+            <td class="premium">{{ formatPremium(task.premium) }}</td>
+            <td class="completed-date">{{ task.targetActionDate }}</td>
+            <td>
+              <span class="status-badge status-completed">✓ Completed</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <ng-template #noCompletedTasks>
+        <div class="no-tasks">
+          <div class="no-tasks-icon">✅</div>
+          <h3>No completed tasks this week</h3>
+          <p>Completed tasks will appear here once tasks are finished.</p>
+          <a routerLink="/" class="btn-primary">Back to Dashboard</a>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Summary Section -->
+    <div *ngIf="!isLoading() && completedTasks().length > 0" class="summary-section">
+      <div class="summary-cards">
+        <div class="summary-card">
+          <span class="summary-icon">📊</span>
+          <div class="summary-content">
+            <span class="summary-number">{{ completedTasks().length }}</span>
+            <span class="summary-label">Tasks Completed</span>
+          </div>
+        </div>
+        <div class="summary-card">
+          <span class="summary-icon">💰</span>
+          <div class="summary-content">
+            <span class="summary-number">{{ getTotalPremium() }}</span>
+            <span class="summary-label">Total Premium</span>
+          </div>
+        </div>
+        <div class="summary-card">
+          <span class="summary-icon">🎯</span>
+          <div class="summary-content">
+            <span class="summary-number">{{ getSuccessRate() }}</span>
+            <span class="summary-label">Success Rate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,182 @@
+<div class="task-detail-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <button class="back-btn" (click)="goBack()">
+      ← Back To Current Portal
+    </button>
+    
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <h3>Quote Processing</h3>
+        <div class="nav-item main-nav-item active">
+          <span class="nav-icon">📊</span>
+          General Quote Info
+        </div>
+        <div class="nav-item sub-nav-item">
+          <span class="nav-icon">🔘</span>
+          Main Info
+        </div>
+        <div class="nav-item sub-nav-item">
+          <span class="nav-icon">📋</span>
+          Supplementary Info
+        </div>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-item main-nav-item">
+          <span class="nav-icon">💰</span>
+          Pricing
+        </div>
+        <div class="nav-item sub-nav-item">
+          <span class="nav-icon">💰</span>
+          Pricing Exposures
+        </div>
+        <div class="nav-item sub-nav-item">
+          <span class="nav-icon">⚙️</span>
+          Policy Setup
+        </div>
+        <div class="nav-item sub-nav-item">
+          <span class="nav-icon">📊</span>
+          Manage Pricing
+        </div>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-item main-nav-item">
+          <span class="nav-icon">📄</span>
+          Wording & Endorsements
+        </div>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-item main-nav-item">
+          <span class="nav-icon">📋</span>
+          Policy Details
+        </div>
+        <div class="nav-item sub-nav-item">
+          <span class="nav-icon">📊</span>
+          UW Rationale
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="content-header">
+      <div class="header-actions">
+        <button class="action-btn lock-btn">🔒</button>
+        <button class="action-btn edit-btn">✏️ Edit</button>
+      </div>
+    </header>
+
+    <!-- Main Info Section -->
+    <section class="main-info-section" *ngIf="!isLoading()">
+      <h1 class="section-title">Main Info</h1>
+      
+      <!-- Insured Section -->
+      <div class="info-group" *ngIf="taskDetail()">
+        <div class="info-row">
+          <span class="info-label">▼ Insured</span>
+          <span class="info-value">{{ taskDetail()?.insured }}</span>
+        </div>
+      </div>
+
+      <!-- Policyholder Section -->
+      <div class="info-group" *ngIf="taskDetail()">
+        <div class="info-row">
+          <span class="info-label">▼ Policyholder</span>
+          <span class="info-value">{{ taskDetail()?.policyholder }}</span>
+        </div>
+      </div>
+
+      <!-- Producer Section -->
+      <div class="info-group producer-section" *ngIf="taskDetail()">
+        <div class="info-header">
+          <span class="info-label">Producer*</span>
+        </div>
+        <div class="producer-details">
+          <textarea class="producer-textarea" readonly>{{ taskDetail()?.producer }}</textarea>
+        </div>
+        
+        <div class="info-row">
+          <span class="info-label">▼ Producer Contact</span>
+          <span class="info-value">{{ taskDetail()?.producerContact }}</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">NAICS / Occupancy Code*</label>
+            <div class="input-group">
+              <input type="text" 
+                     class="form-input" 
+                     [value]="taskDetail()?.naicsOccupancyCode" 
+                     readonly>
+              <button class="lookup-btn">TUG</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">SIC Code*</label>
+            <input type="text" 
+                   class="form-input" 
+                   [value]="taskDetail()?.sicCode" 
+                   readonly>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label class="form-label">Business Description*</label>
+            <textarea class="form-textarea" 
+                      [value]="taskDetail()?.businessDescription" 
+                      placeholder="-"></textarea>
+          </div>
+        </div>
+
+        <!-- Second NAICS/SIC Section -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">NAICS / Occupancy Code*</label>
+            <div class="input-group">
+              <input type="text" 
+                     class="form-input" 
+                     [value]="taskDetail()?.naicsOccupancyCode" 
+                     readonly>
+              <button class="lookup-btn">TUG</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">SIC Code*</label>
+            <input type="text" 
+                   class="form-input" 
+                   [value]="taskDetail()?.sicCode" 
+                   readonly>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading()" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading task details...</p>
+    </div>
+  </main>
+  
+  <!-- Quote Summary Sidebar -->
+  <aside class="quote-summary-sidebar" (click)="navigateToTasks()">
+    <div class="quote-summary-content">
+      <span class="arrow-icon">◄</span>
+      <div class="quote-summary-tab">
+        <span class="tab-text">Quote Summary</span>
+      </div>
+    </div>
+  </aside>
+</div>

@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "Figma MCP": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--figma-api-key=",
+        "--stdio"
+      ]
+    },
+    "serena": {
+            "command": "//Users/mvvkiran/.local/bin/uvx",
+            "args": ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
+        }
+  }
+}

@@ -1,0 +1,403 @@
+<div class="dashboard-container">
+
+  <!-- Hero Section with Background Image -->
+  <section class="hero-container">
+    <div class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Welcome back, Jane. How may we help you today?</h1>
+      </div>
+    </div>
+  </section>
+
+  <!-- Date and Currency Section -->
+  <div class="info-bar">
+    <span class="last-updated">Last updated 31 Jul 25, 4:00pm</span>
+    <div class="currency-toggle">
+      <span class="currency">SGD</span>
+      <div class="toggle">
+        <span class="toggle-option">USD</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading()" class="main-content">
+    
+    <!-- Cards Grid -->
+    <section class="cards-grid">
+      <!-- Dashboard Cards -->
+      <div *ngFor="let card of dashboardCards()" class="dashboard-card">
+        <div class="card-header">
+          <span class="card-icon">{{ card.icon || '📝' }}</span>
+          <span class="card-title">{{ card.title }}</span>
+        </div>
+        <div class="card-content">
+          <div class="card-main">
+            <span class="card-value">{{ card.value }}</span>
+            <span class="card-subtitle">{{ card.subtitle }}</span>
+          </div>
+          <div class="card-change" *ngIf="card.change">{{ card.change }}</div>
+          <a *ngIf="card.link && card.type === 'tasks'" [routerLink]="card.link" class="card-link">View all tasks →</a>
+          <a *ngIf="card.link && card.type === 'completed'" [routerLink]="card.link" class="card-link">See completed tasks →</a>
+        </div>
+      </div>
+
+      <!-- Portfolio Cards -->
+      <div *ngFor="let card of portfolioCards()" class="portfolio-card">
+        <div class="card-header">
+          <span class="card-icon">{{ card.icon || '📊' }}</span>
+          <span class="card-title">{{ card.title }}</span>
+        </div>
+        <div class="card-content">
+          <div class="card-main">
+            <span class="card-value">{{ card.value }}</span>
+            <span class="card-subtitle">{{ card.boundAmount }}</span>
+          </div>
+          <div class="card-details">
+            <div>{{ card.boundQuoteRatio }}</div>
+            <div>{{ card.openQuote }}</div>
+          </div>
+          <a class="card-link">{{ card.link }} ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Two Column Layout -->
+    <div class="two-column-layout">
+      <!-- Left Column - Our Products -->
+      <aside class="sidebar">
+        <h2 class="sidebar-title">Our products</h2>
+        <nav class="product-nav">
+          <div *ngFor="let category of productCategories()" 
+               class="nav-item"
+               [class.active]="category.isActive"
+               (click)="onCategoryClick(category)">
+            <span class="nav-icon">
+              <span [ngSwitch]="category.icon">
+                <span *ngSwitchCase="'edit'">📝</span>
+                <span *ngSwitchCase="'settings'">⚙️</span>
+                <span *ngSwitchCase="'users'">👥</span>
+                <span *ngSwitchDefault>📋</span>
+              </span>
+            </span>
+            <span class="nav-label">{{ category.name }}</span>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Right Column - Dynamic Content -->
+      <main class="main-section">
+        
+        <!-- Default Content: Tasks Due This Week -->
+        <section class="tasks-section" *ngIf="selectedCategory() === 'Today\'s tasks'">
+          <h2 class="section-title">Tasks due this week</h2>
+          
+          <div class="tasks-table-container">
+            <table class="tasks-table" *ngIf="tasksThisWeek().length > 0; else noTasks">
+              <thead>
+                <tr>
+                  <th>Account Name</th>
+                  <th>NAIC Description</th>
+                  <th>LOB/Products</th>
+                  <th>Propensity to bind</th>
+                  <th>Target action date</th>
+                  <th>Pending action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let task of tasksThisWeek()" class="task-row">
+                  <td class="account-name">
+                    <div class="priority-flag" *ngIf="task.priority">🏳️</div>
+                    <a [routerLink]="['/task-detail', task.id]" class="task-link">
+                      {{ task.accountName }}<br>
+                      <small>{{ task.id }}</small>
+                    </a>
+                  </td>
+                  <td class="naic-desc">{{ task.naicDescription }}</td>
+                  <td class="lob-products">{{ task.lobProducts }}</td>
+                  <td>
+                    <span class="propensity-badge" [ngClass]="getPropensityClass(task.propensityToBind)">
+                      {{ task.propensityToBind }}
+                    </span>
+                  </td>
+                  <td class="target-date">{{ task.targetActionDate }}</td>
+                  <td class="pending-action">{{ task.pendingAction }}</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <ng-template #noTasks>
+              <div class="no-tasks">
+                <div class="no-tasks-icon">📋</div>
+                <h3>No tasks due this week</h3>
+                <p>You're all caught up! Check the all tasks page for future work.</p>
+                <a routerLink="/tasks" class="btn-primary">View All Tasks</a>
+              </div>
+            </ng-template>
+          </div>
+        </section>
+
+        <!-- Underwriting Tools Content -->
+        <section class="underwriting-tools-section" *ngIf="selectedCategory() === 'Underwriting tools'">
+          <div class="tools-grid">
+            <div class="tool-card">
+              <div class="card-header">
+                <span class="tool-icon">🔧</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="tool-title">Chubb AI</h3>
+              <p class="tool-description">
+                Our advanced artificial intelligence platform, designed to enhance productivity, underwriting, and customer service capabilities.
+              </p>
+              <a href="#" class="tool-link">Go to Platform ↗</a>
+            </div>
+
+            <div class="tool-card">
+              <div class="card-header">
+                <span class="tool-icon">🔍</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="tool-title">Global Client Search (ACERS)</h3>
+              <p class="tool-description">
+                Search and research on potential customers, clients, or partners who may have an interest in our products or services
+              </p>
+              <a href="#" class="tool-link">Go to Platform ↗</a>
+            </div>
+
+            <div class="tool-card">
+              <div class="card-header">
+                <span class="tool-icon">📊</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="tool-title">Underwriting guidelines</h3>
+              <p class="tool-description">
+                View our underwriting rules, criteria, and workflows on this platform
+              </p>
+              <a href="#" class="tool-link">Go to Platform ↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Servicing Content -->
+        <section class="servicing-section" *ngIf="selectedCategory() === 'Servicing'">
+          <h2 class="section-title">Policy Servicing & Customer Support</h2>
+          
+          <div class="servicing-grid">
+            <!-- Policy Management -->
+            <div class="service-card">
+              <div class="card-header">
+                <span class="service-icon">📋</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="service-title">Policy Management</h3>
+              <p class="service-description">
+                Handle policy endorsements, renewals, cancellations, and certificate requests. Track policy changes and maintain accurate records.
+              </p>
+              <div class="service-stats">
+                <div class="stat-item">
+                  <span class="stat-number">42</span>
+                  <span class="stat-label">Active Endorsements</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">18</span>
+                  <span class="stat-label">Renewals Due</span>
+                </div>
+              </div>
+              <a href="#" class="service-link">Manage Policies ↗</a>
+            </div>
+
+            <!-- Claims Support -->
+            <div class="service-card">
+              <div class="card-header">
+                <span class="service-icon">🛡️</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="service-title">Claims Support</h3>
+              <p class="service-description">
+                Assist with claim reporting, status updates, and documentation. Coordinate with claims adjusters and provide customer support.
+              </p>
+              <div class="service-stats">
+                <div class="stat-item">
+                  <span class="stat-number">12</span>
+                  <span class="stat-label">Open Claims</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">3</span>
+                  <span class="stat-label">Pending Review</span>
+                </div>
+              </div>
+              <a href="#" class="service-link">View Claims ↗</a>
+            </div>
+
+            <!-- Customer Communications -->
+            <div class="service-card">
+              <div class="card-header">
+                <span class="service-icon">💬</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="service-title">Customer Communications</h3>
+              <p class="service-description">
+                Handle customer inquiries, send policy notices, and maintain communication logs. Ensure timely responses to all customer needs.
+              </p>
+              <div class="service-stats">
+                <div class="stat-item">
+                  <span class="stat-number">28</span>
+                  <span class="stat-label">Open Inquiries</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">95%</span>
+                  <span class="stat-label">Response Rate</span>
+                </div>
+              </div>
+              <a href="#" class="service-link">View Messages ↗</a>
+            </div>
+
+            <!-- Billing & Payments -->
+            <div class="service-card">
+              <div class="card-header">
+                <span class="service-icon">💳</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="service-title">Billing & Payments</h3>
+              <p class="service-description">
+                Process premium payments, handle billing inquiries, and manage payment plans. Track outstanding balances and collections.
+              </p>
+              <div class="service-stats">
+                <div class="stat-item">
+                  <span class="stat-number">$124K</span>
+                  <span class="stat-label">Outstanding Premiums</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">87%</span>
+                  <span class="stat-label">Collection Rate</span>
+                </div>
+              </div>
+              <a href="#" class="service-link">View Billing ↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Collaboration Content -->
+        <section class="collaboration-section" *ngIf="selectedCategory() === 'Collaboration'">
+          <h2 class="section-title">Team Collaboration & Workflow</h2>
+          
+          <div class="collaboration-grid">
+            <!-- Team Communications -->
+            <div class="collab-card">
+              <div class="card-header">
+                <span class="collab-icon">👥</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="collab-title">Team Communications</h3>
+              <p class="collab-description">
+                Collaborate with underwriters, claims adjusters, and brokers. Share insights, discuss complex cases, and coordinate responses.
+              </p>
+              <div class="collab-activity">
+                <div class="activity-item">
+                  <span class="activity-avatar">JS</span>
+                  <div class="activity-content">
+                    <span class="activity-text">John shared QR796075927 for review</span>
+                    <span class="activity-time">2 hours ago</span>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <span class="activity-avatar">ML</span>
+                  <div class="activity-content">
+                    <span class="activity-text">Maria commented on MUJI case</span>
+                    <span class="activity-time">4 hours ago</span>
+                  </div>
+                </div>
+              </div>
+              <a href="#" class="collab-link">View All Messages ↗</a>
+            </div>
+
+            <!-- Shared Workspaces -->
+            <div class="collab-card">
+              <div class="card-header">
+                <span class="collab-icon">📁</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="collab-title">Shared Workspaces</h3>
+              <p class="collab-description">
+                Access shared files, templates, and resources. Collaborate on complex submissions and maintain consistent documentation.
+              </p>
+              <div class="workspace-list">
+                <div class="workspace-item">
+                  <span class="workspace-icon">📂</span>
+                  <span class="workspace-name">Complex Risk Cases</span>
+                  <span class="workspace-count">24 files</span>
+                </div>
+                <div class="workspace-item">
+                  <span class="workspace-icon">📄</span>
+                  <span class="workspace-name">Underwriting Templates</span>
+                  <span class="workspace-count">12 templates</span>
+                </div>
+                <div class="workspace-item">
+                  <span class="workspace-icon">📊</span>
+                  <span class="workspace-name">Risk Assessment Tools</span>
+                  <span class="workspace-count">8 tools</span>
+                </div>
+              </div>
+              <a href="#" class="collab-link">Browse Workspaces ↗</a>
+            </div>
+
+            <!-- Knowledge Sharing -->
+            <div class="collab-card">
+              <div class="card-header">
+                <span class="collab-icon">🧠</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="collab-title">Knowledge Sharing</h3>
+              <p class="collab-description">
+                Share expertise, best practices, and lessons learned. Access the team knowledge base and contribute insights from your experience.
+              </p>
+              <div class="knowledge-stats">
+                <div class="knowledge-item">
+                  <span class="knowledge-number">156</span>
+                  <span class="knowledge-label">Articles</span>
+                </div>
+                <div class="knowledge-item">
+                  <span class="knowledge-number">42</span>
+                  <span class="knowledge-label">Case Studies</span>
+                </div>
+                <div class="knowledge-item">
+                  <span class="knowledge-number">18</span>
+                  <span class="knowledge-label">Best Practices</span>
+                </div>
+              </div>
+              <a href="#" class="collab-link">Browse Knowledge Base ↗</a>
+            </div>
+
+            <!-- Workflow Automation -->
+            <div class="collab-card">
+              <div class="card-header">
+                <span class="collab-icon">⚙️</span>
+                <span class="heart-icon">♡</span>
+              </div>
+              <h3 class="collab-title">Workflow Automation</h3>
+              <p class="collab-description">
+                Streamline repetitive tasks with automated workflows. Set up approval chains, notifications, and task assignments for efficient processing.
+              </p>
+              <div class="workflow-list">
+                <div class="workflow-item">
+                  <span class="workflow-status active">●</span>
+                  <span class="workflow-name">New Submission Review</span>
+                </div>
+                <div class="workflow-item">
+                  <span class="workflow-status active">●</span>
+                  <span class="workflow-name">Risk Assessment Approval</span>
+                </div>
+                <div class="workflow-item">
+                  <span class="workflow-status inactive">○</span>
+                  <span class="workflow-name">Premium Calculation</span>
+                </div>
+              </div>
+              <a href="#" class="collab-link">Manage Workflows ↗</a>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</div>

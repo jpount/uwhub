@@ -1,0 +1,171 @@
+<div class="tasks-container">
+  <!-- Header Section -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <span class="logo">UW Hub</span>
+      </div>
+      <nav class="nav">
+        <a routerLink="/" class="nav-link">Home</a>
+        <a routerLink="/tasks" class="nav-link active">Tasks</a>
+      </nav>
+      <div class="user-section">
+        <span class="user-name">Jane Smith</span>
+        <div class="user-dropdown">▼</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tasks Page Content -->
+  <div class="tasks-content">
+    <div class="page-header">
+      <h1 class="page-title">Tasks</h1>
+    </div>
+
+    <!-- Task Tabs -->
+    <div class="task-tabs">
+      <div class="tab-nav">
+        <button class="tab-btn personal-tab active">
+          <span class="tab-icon">👤</span>
+          Personal
+        </button>
+        <button class="tab-btn team-tab">
+          <span class="tab-icon">👥</span>
+          Team view
+        </button>
+      </div>
+    </div>
+
+    <!-- Task Status Tabs -->
+    <div class="status-tabs">
+      <button 
+        class="status-tab"
+        [class.active]="activeTab() === 'open'"
+        (click)="setActiveTab('open')">
+        Open ({{ openTasks().length }})
+        <span class="notification-badge" *ngIf="openTasks().length > 0">{{ openTasks().length > 99 ? '99+' : openTasks().length }}</span>
+      </button>
+      <button 
+        class="status-tab"
+        [class.active]="activeTab() === 'completed'"
+        (click)="setActiveTab('completed')">
+        Completed ({{ completedTasks().length }})
+      </button>
+      <button 
+        class="status-tab"
+        [class.active]="activeTab() === 'all'"
+        (click)="setActiveTab('all')">
+        All ({{ allTasks().length }})
+      </button>
+    </div>
+
+    <!-- Last Updated Info -->
+    <div class="last-updated">
+      Last updated 31 Jul 25, 4:00pm
+    </div>
+
+    <!-- Tasks Table -->
+    <div class="tasks-table-container">
+      <table class="tasks-table" *ngIf="getCurrentTasks().length > 0; else noTasks">
+        <thead>
+          <tr>
+            <th class="sortable">
+              <span class="header-content">
+                <span class="header-icon">🏳️</span>
+                Account Name
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
+            <th class="sortable">
+              <span class="header-content">
+                NAIC Description
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
+            <th class="sortable">
+              <span class="header-content">
+                LOB/Products
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
+            <th class="sortable">
+              <span class="header-content">
+                Transaction type
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
+            <th class="sortable">
+              <span class="header-content">
+                Propensity to bind
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
+            <th class="sortable">
+              <span class="header-content">
+                Status
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
+            <th class="sortable">
+              <span class="header-content">
+                Target action date
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
+            <th class="sortable">
+              <span class="header-content">
+                Pending action
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
+            <th class="sortable">
+              <span class="header-content">
+                Premium
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
+            <th class="pin-column">Pin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of getCurrentTasks()" class="task-row">
+            <td class="account-name">
+              <div class="priority-flag" *ngIf="task.priority">🏳️</div>
+              <a [routerLink]="['/task-detail', task.id]" class="task-link">
+                {{ task.accountName }}<br>
+                <small class="task-id">{{ task.id }}</small>
+              </a>
+            </td>
+            <td class="naic-desc">{{ task.naicDescription }}</td>
+            <td class="lob-products">{{ task.lobProducts }}</td>
+            <td class="transaction-type">{{ task.transactionType }}</td>
+            <td>
+              <span class="propensity-badge" [ngClass]="getPropensityClass(task.propensityToBind)">
+                {{ task.propensityToBind }}
+              </span>
+            </td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(task.status)">
+                {{ task.status }}
+              </span>
+            </td>
+            <td class="target-date">{{ task.targetActionDate }}</td>
+            <td class="pending-action">{{ task.pendingAction }}</td>
+            <td class="premium">{{ formatPremium(task.premium) }}</td>
+            <td class="pin-column">
+              <button class="pin-btn">📌</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <ng-template #noTasks>
+        <div class="no-tasks">
+          <div class="no-tasks-icon">📋</div>
+          <h3>No tasks found</h3>
+          <p>There are no tasks matching the current filter.</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

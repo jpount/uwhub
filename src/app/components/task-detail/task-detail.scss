@@ -1,0 +1,284 @@
+/* Task Detail Mobile Responsive Styles */
+
+/* Tablet Portrait & Mobile */
+@media (max-width: 768px) {
+  .task-detail-container {
+    flex-direction: column;
+  }
+  
+  .task-detail-container .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    order: 1;
+    border-radius: 0;
+  }
+  
+  .sidebar-nav {
+    padding: 16px;
+  }
+  
+  .nav-section {
+    margin-bottom: 20px;
+    
+    h3 {
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+  }
+  
+  .task-detail-container .nav-item {
+    padding: 8px 10px;
+    margin: 0;
+    
+    &.main-nav-item {
+      padding: 10px 10px;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    
+    &.sub-nav-item {
+      padding: 6px 10px 6px 20px;
+      font-size: 12px;
+      margin-bottom: 2px;
+      
+      .nav-icon {
+        font-size: 12px;
+      }
+    }
+    
+    &.active {
+      margin-left: -16px;
+      padding-left: 25px;
+    }
+  }
+  
+  .nav-label {
+    font-size: 13px;
+  }
+  
+  .task-detail-container .main-content {
+    order: 2;
+    padding: 0;
+  }
+  
+  .content-header {
+    padding: 12px 16px;
+  }
+  
+  .action-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    
+    &.edit-btn {
+      font-size: 13px;
+    }
+  }
+  
+  .main-info-section {
+    padding: 16px;
+  }
+  
+  .info-group {
+    margin-bottom: 20px;
+  }
+  
+  .info-row {
+    padding: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .info-label {
+    min-width: auto;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  .info-value {
+    font-size: 14px;
+  }
+  
+  .producer-section {
+    padding: 16px;
+  }
+  
+  .producer-textarea {
+    min-height: 60px;
+    font-size: 13px;
+    padding: 10px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .form-label {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  
+  .form-input, .form-textarea {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+  
+  .lookup-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .quote-summary-sidebar {
+    display: none;
+  }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+  .back-btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .sidebar-nav {
+    padding: 12px;
+  }
+  
+  .nav-section {
+    margin-bottom: 16px;
+    
+    h3 {
+      font-size: 10px;
+      margin-bottom: 8px;
+    }
+  }
+  
+  .task-detail-container .nav-item {
+    padding: 6px 8px;
+    
+    &.main-nav-item {
+      padding: 8px 8px;
+      font-size: 13px;
+    }
+    
+    &.sub-nav-item {
+      padding: 5px 8px 5px 16px;
+      font-size: 11px;
+      
+      .nav-icon {
+        font-size: 11px;
+      }
+    }
+    
+    &.active {
+      margin-left: -12px;
+      padding-left: 19px;
+    }
+  }
+  
+  .nav-label {
+    font-size: 12px;
+  }
+  
+  .content-header {
+    padding: 10px 12px;
+  }
+  
+  .action-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  
+  .main-info-section {
+    padding: 12px;
+  }
+  
+  .info-group {
+    margin-bottom: 16px;
+  }
+  
+  .info-row {
+    padding: 10px;
+  }
+  
+  .info-label {
+    font-size: 12px;
+  }
+  
+  .info-value {
+    font-size: 13px;
+  }
+  
+  .producer-section {
+    padding: 12px;
+  }
+  
+  .producer-textarea {
+    min-height: 50px;
+    font-size: 12px;
+    padding: 8px;
+  }
+  
+  .form-row {
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .form-label {
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+  
+  .form-input, .form-textarea {
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+  
+  .lookup-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-height: 568px) and (orientation: landscape) {
+  .task-detail-container .sidebar {
+    height: auto;
+  }
+  
+  .sidebar-nav {
+    padding: 12px;
+  }
+  
+  .nav-section {
+    margin-bottom: 12px;
+  }
+  
+  .task-detail-container .nav-item {
+    padding: 4px 8px;
+    
+    &.main-nav-item {
+      padding: 6px 8px;
+    }
+    
+    &.sub-nav-item {
+      padding: 3px 8px 3px 16px;
+    }
+  }
+  
+  .main-info-section {
+    padding: 12px;
+  }
+  
+  .info-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-row {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+}
