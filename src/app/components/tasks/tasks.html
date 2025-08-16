@@ -25,11 +25,15 @@
     <!-- Task Tabs -->
     <div class="task-tabs">
       <div class="tab-nav">
-        <button class="tab-btn personal-tab active">
+        <button class="tab-btn personal-tab"
+                [class.active]="viewMode() === 'personal'"
+                (click)="setViewMode('personal')">
           <span class="tab-icon">👤</span>
           Personal
         </button>
-        <button class="tab-btn team-tab">
+        <button class="tab-btn team-tab"
+                [class.active]="viewMode() === 'team'"
+                (click)="setViewMode('team')">
           <span class="tab-icon">👥</span>
           Team view
         </button>
@@ -42,20 +46,20 @@
         class="status-tab"
         [class.active]="activeTab() === 'open'"
         (click)="setActiveTab('open')">
-        Open ({{ openTasks().length }})
-        <span class="notification-badge" *ngIf="openTasks().length > 0">{{ openTasks().length > 99 ? '99+' : openTasks().length }}</span>
+        Open ({{ getTaskCounts().open }})
+        <span class="notification-badge" *ngIf="getTaskCounts().open > 0">{{ getTaskCounts().open > 99 ? '99+' : getTaskCounts().open }}</span>
       </button>
       <button 
         class="status-tab"
         [class.active]="activeTab() === 'completed'"
         (click)="setActiveTab('completed')">
-        Completed ({{ completedTasks().length }})
+        Completed ({{ getTaskCounts().completed }})
       </button>
       <button 
         class="status-tab"
         [class.active]="activeTab() === 'all'"
         (click)="setActiveTab('all')">
-        All ({{ allTasks().length }})
+        All ({{ getTaskCounts().all }})
       </button>
     </div>
 
@@ -124,6 +128,12 @@
                 <span class="sort-icons">↕</span>
               </span>
             </th>
+            <th class="sortable" *ngIf="viewMode() === 'team'">
+              <span class="header-content">
+                Assigned To
+                <span class="sort-icons">↕</span>
+              </span>
+            </th>
             <th class="pin-column">Pin</th>
           </tr>
         </thead>
@@ -152,6 +162,11 @@
             <td class="target-date">{{ task.targetActionDate }}</td>
             <td class="pending-action">{{ task.pendingAction }}</td>
             <td class="premium">{{ formatPremium(task.premium) }}</td>
+            <td class="assigned-to" *ngIf="viewMode() === 'team'">
+              <span class="assignee-name" [class.current-user]="task.assignedTo === 'Jane Smith'">
+                {{ task.assignedTo }}
+              </span>
+            </td>
             <td class="pin-column">
               <button class="pin-btn">📌</button>
             </td>

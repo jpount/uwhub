@@ -14,6 +14,10 @@ export class TaskDetail implements OnInit {
   task = signal<Task | null>(null);
   taskDetail = signal<TaskDetailInterface | null>(null);
   isLoading = signal(true);
+  isMobileMenuOpen = signal(false);
+  activeSection = signal('main-info');
+  isEditMode = signal(false);
+  hasUnsavedChanges = signal(false);
 
   constructor(
     private taskService: TaskService,
@@ -57,5 +61,60 @@ export class TaskDetail implements OnInit {
 
   navigateToTasks() {
     this.router.navigate(['/tasks']);
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.update(value => !value);
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen.set(false);
+  }
+
+  navigateToSection(section: string) {
+    this.activeSection.set(section);
+    // Close mobile menu after navigation
+    this.closeMobileMenu();
+  }
+
+  toggleEditMode() {
+    if (this.isEditMode()) {
+      // If currently in edit mode, save changes
+      this.saveChanges();
+    } else {
+      // Enter edit mode
+      this.isEditMode.set(true);
+    }
+  }
+
+  saveChanges() {
+    // Simulate saving changes
+    console.log('Saving changes...');
+    
+    // In a real app, you would save to backend here
+    // For now, we'll just show a success message
+    this.isEditMode.set(false);
+    this.hasUnsavedChanges.set(false);
+    
+    // Show success notification (you can enhance this)
+    alert('Changes saved successfully!');
+  }
+
+  cancelEdit() {
+    if (this.hasUnsavedChanges()) {
+      const confirmCancel = confirm('You have unsaved changes. Are you sure you want to cancel?');
+      if (!confirmCancel) {
+        return;
+      }
+    }
+    
+    this.isEditMode.set(false);
+    this.hasUnsavedChanges.set(false);
+    // Reload original data
+    this.loadTaskDetail(this.route.snapshot.params['id']);
+  }
+
+  onFieldChange() {
+    this.hasUnsavedChanges.set(true);
   }
 }

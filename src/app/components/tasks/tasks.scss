@@ -1,0 +1,35 @@
+/* Team View Styles */
+.assigned-to {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+.assignee-name {
+  font-size: 14px;
+  color: var(--gray-700);
+  font-weight: 500;
+  
+  &.current-user {
+    color: var(--primary-blue);
+    font-weight: 600;
+    position: relative;
+    
+    &::after {
+      content: ' (You)';
+      font-size: 12px;
+      color: var(--gray-500);
+      font-weight: 400;
+    }
+  }
+}
+
+/* Team tab active state */
+.team-tab.active {
+  background: var(--primary-purple);
+  color: white;
+}
+
+.personal-tab.active {
+  background: var(--primary-purple);
+  color: white;
+}

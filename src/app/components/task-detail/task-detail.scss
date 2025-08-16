@@ -1,17 +1,108 @@
 /* Task Detail Mobile Responsive Styles */
 
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1001;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, background-color 0.2s;
+  
+  &:hover {
+    background: var(--primary-purple);
+    transform: scale(1.05);
+  }
+  
+  &.menu-open {
+    background: var(--primary-purple);
+  }
+}
+
+/* Mobile Close Button */
+.mobile-close-btn {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Mobile Sidebar Overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s;
+  
+  &.active {
+    opacity: 1;
+  }
+}
+
 /* Tablet Portrait & Mobile */
 @media (max-width: 768px) {
   .task-detail-container {
-    flex-direction: column;
+    flex-direction: row;
+    padding-left: 0;
+  }
+  
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .mobile-close-btn {
+    display: block;
+  }
+  
+  .sidebar-overlay {
+    display: block;
+    pointer-events: none;
+    
+    &.active {
+      pointer-events: auto;
+    }
   }
   
   .task-detail-container .sidebar {
-    width: 100%;
-    height: auto;
-    position: static;
-    order: 1;
-    border-radius: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+    
+    &.mobile-menu-open {
+      transform: translateX(0);
+    }
   }
   
   .sidebar-nav {
@@ -58,12 +149,14 @@
   }
   
   .task-detail-container .main-content {
-    order: 2;
+    width: 100%;
+    margin-left: 0;
     padding: 0;
   }
   
   .content-header {
     padding: 12px 16px;
+    padding-top: 60px; /* Space for mobile menu button */
   }
   
   .action-btn {
@@ -138,6 +231,11 @@
 
 /* Mobile Portrait */
 @media (max-width: 480px) {
+  .task-detail-container .sidebar {
+    width: 85vw; /* Take most of the screen width on small devices */
+    max-width: 320px;
+  }
+  
   .back-btn {
     padding: 12px 16px;
     font-size: 14px;
@@ -241,6 +339,405 @@
     padding: 6px 10px;
     font-size: 12px;
   }
+}
+
+/* Additional Section Styles */
+.supplementary-info-section,
+.pricing-exposures-section,
+.policy-setup-section,
+.manage-pricing-section,
+.uw-rationale-section {
+  padding: 24px;
+  background: white;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--gray-200);
+}
+
+/* Exposure Grid Styles */
+.exposure-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.exposure-card {
+  background: var(--gray-50);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 16px;
+  }
+}
+
+/* Coverage List Styles */
+.coverage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--gray-700);
+  font-size: 14px;
+  
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+}
+
+/* Setup Card Styles */
+.setup-card {
+  background: var(--gray-50);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  margin-bottom: 20px;
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 16px;
+  }
+}
+
+/* Endorsement List Styles */
+.endorsement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.endorsement-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 6px;
+  
+  .endorsement-code {
+    font-weight: 600;
+    color: var(--primary-blue);
+    min-width: 80px;
+  }
+  
+  .endorsement-name {
+    flex: 1;
+    color: var(--gray-700);
+  }
+  
+  .remove-btn {
+    background: none;
+    border: none;
+    color: var(--danger-red);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+    
+    &:hover {
+      background: var(--danger-red);
+      color: white;
+      border-radius: 4px;
+    }
+  }
+}
+
+.add-endorsement-btn {
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  
+  &:hover {
+    background: var(--primary-purple);
+  }
+}
+
+/* Pricing Table Styles */
+.pricing-summary {
+  background: var(--gray-50);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  margin-bottom: 20px;
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 16px;
+  }
+}
+
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  
+  th {
+    background: var(--gray-100);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--gray-700);
+    border-bottom: 2px solid var(--gray-300);
+  }
+  
+  td {
+    padding: 12px;
+    border-bottom: 1px solid var(--gray-200);
+    color: var(--gray-700);
+  }
+  
+  .mod-factor {
+    font-size: 12px;
+    color: var(--gray-600);
+    background: var(--gray-100);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .premium-amount {
+    font-weight: 600;
+    color: var(--gray-900);
+    text-align: right;
+  }
+  
+  .total-row {
+    background: var(--gray-100);
+    
+    td {
+      padding: 16px 12px;
+      border-bottom: none;
+      border-top: 2px solid var(--gray-300);
+    }
+    
+    .premium-total {
+      font-size: 18px;
+      color: var(--primary-blue);
+      text-align: right;
+    }
+  }
+}
+
+/* Pricing Adjustments */
+.pricing-adjustments {
+  background: var(--gray-50);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 16px;
+  }
+}
+
+.recalculate-btn {
+  background: var(--primary-purple);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 16px;
+  
+  &:hover {
+    background: var(--primary-blue);
+  }
+}
+
+/* Rationale Card Styles */
+.rationale-card {
+  background: var(--gray-50);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  margin-bottom: 20px;
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 16px;
+  }
+}
+
+.risk-factors {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.risk-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--gray-200);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  .risk-label {
+    font-weight: 600;
+    color: var(--gray-700);
+    min-width: 150px;
+  }
+  
+  .risk-value {
+    color: var(--gray-600);
+  }
+  
+  .risk-score {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    
+    &.low {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    &.medium {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    &.high {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  }
+}
+
+/* Approval Section */
+.approval-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.approval-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 6px;
+  
+  .approval-label {
+    font-weight: 600;
+    color: var(--gray-700);
+    min-width: 140px;
+  }
+  
+  .approval-value {
+    flex: 1;
+    color: var(--gray-600);
+  }
+  
+  .approval-status {
+    font-weight: 600;
+    
+    &.approved {
+      color: var(--success-green);
+    }
+  }
+}
+
+/* Make sub-nav items clickable */
+.nav-item.sub-nav-item {
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Edit Mode Styles */
+.edit-btn.save-btn {
+  background: var(--success-green);
+  color: white;
+  
+  &:hover {
+    background: #059669;
+  }
+}
+
+.cancel-btn {
+  background: var(--danger-red);
+  color: white;
+  
+  &:hover {
+    background: #dc2626;
+  }
+}
+
+.locked {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Form fields in edit mode */
+.form-input:not([readonly]):not([disabled]),
+.form-textarea:not([readonly]):not([disabled]),
+.producer-textarea:not([readonly]) {
+  border-color: var(--primary-blue);
+  background-color: #fefefe;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  
+  &:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
+  }
+}
+
+/* Disabled fields styling */
+.form-input[readonly],
+.form-input[disabled],
+.form-textarea[readonly],
+.producer-textarea[readonly] {
+  background-color: var(--gray-50);
+  color: var(--gray-600);
+  cursor: default;
+}
+
+/* Visual indicator for changed fields */
+.has-changes {
+  border-color: #f59e0b !important;
+  background-color: #fffbeb;
 }
 
 /* Landscape Mobile */

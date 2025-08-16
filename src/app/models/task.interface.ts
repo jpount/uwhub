@@ -10,6 +10,7 @@ export interface Task {
   pendingAction: string;
   premium: number;
   priority?: boolean;
+  assignedTo?: string;
 }
 
 export interface Comment {

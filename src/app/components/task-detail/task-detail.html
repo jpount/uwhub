@@ -1,6 +1,21 @@
 <div class="task-detail-container">
+  <!-- Mobile Menu Toggle Button -->
+  <button class="mobile-menu-toggle" 
+          [class.menu-open]="isMobileMenuOpen()"
+          (click)="toggleMobileMenu()">
+    ☰
+  </button>
+
+  <!-- Mobile Sidebar Overlay -->
+  <div class="sidebar-overlay" 
+       [class.active]="isMobileMenuOpen()"
+       (click)="closeMobileMenu()"></div>
+
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" [class.mobile-menu-open]="isMobileMenuOpen()">
+    <button class="mobile-close-btn" (click)="closeMobileMenu()">
+      ✕
+    </button>
     <button class="back-btn" (click)="goBack()">
       ← Back To Current Portal
     </button>
@@ -8,15 +23,19 @@
     <nav class="sidebar-nav">
       <div class="nav-section">
         <h3>Quote Processing</h3>
-        <div class="nav-item main-nav-item active">
+        <div class="nav-item main-nav-item">
           <span class="nav-icon">📊</span>
           General Quote Info
         </div>
-        <div class="nav-item sub-nav-item">
+        <div class="nav-item sub-nav-item" 
+             [class.active]="activeSection() === 'main-info'"
+             (click)="navigateToSection('main-info')">
           <span class="nav-icon">🔘</span>
           Main Info
         </div>
-        <div class="nav-item sub-nav-item">
+        <div class="nav-item sub-nav-item"
+             [class.active]="activeSection() === 'supplementary-info'"
+             (click)="navigateToSection('supplementary-info')">
           <span class="nav-icon">📋</span>
           Supplementary Info
         </div>
@@ -27,15 +46,21 @@
           <span class="nav-icon">💰</span>
           Pricing
         </div>
-        <div class="nav-item sub-nav-item">
+        <div class="nav-item sub-nav-item"
+             [class.active]="activeSection() === 'pricing-exposures'"
+             (click)="navigateToSection('pricing-exposures')">
           <span class="nav-icon">💰</span>
           Pricing Exposures
         </div>
-        <div class="nav-item sub-nav-item">
+        <div class="nav-item sub-nav-item"
+             [class.active]="activeSection() === 'policy-setup'"
+             (click)="navigateToSection('policy-setup')">
           <span class="nav-icon">⚙️</span>
           Policy Setup
         </div>
-        <div class="nav-item sub-nav-item">
+        <div class="nav-item sub-nav-item"
+             [class.active]="activeSection() === 'manage-pricing'"
+             (click)="navigateToSection('manage-pricing')">
           <span class="nav-icon">📊</span>
           Manage Pricing
         </div>
@@ -53,7 +78,9 @@
           <span class="nav-icon">📋</span>
           Policy Details
         </div>
-        <div class="nav-item sub-nav-item">
+        <div class="nav-item sub-nav-item"
+             [class.active]="activeSection() === 'uw-rationale'"
+             (click)="navigateToSection('uw-rationale')">
           <span class="nav-icon">📊</span>
           UW Rationale
         </div>
@@ -66,13 +93,26 @@
     <!-- Header -->
     <header class="content-header">
       <div class="header-actions">
-        <button class="action-btn lock-btn">🔒</button>
-        <button class="action-btn edit-btn">✏️ Edit</button>
+        <button class="action-btn lock-btn" 
+                [class.locked]="!isEditMode()"
+                (click)="isEditMode() && saveChanges()">
+          {{ isEditMode() ? '🔓' : '🔒' }}
+        </button>
+        <button class="action-btn edit-btn"
+                [class.save-btn]="isEditMode()"
+                (click)="toggleEditMode()">
+          {{ isEditMode() ? '💾 Save' : '✏️ Edit' }}
+        </button>
+        <button class="action-btn cancel-btn"
+                *ngIf="isEditMode()"
+                (click)="cancelEdit()">
+          ❌ Cancel
+        </button>
       </div>
     </header>
 
     <!-- Main Info Section -->
-    <section class="main-info-section" *ngIf="!isLoading()">
+    <section class="main-info-section" *ngIf="!isLoading() && activeSection() === 'main-info'">
       <h1 class="section-title">Main Info</h1>
       
       <!-- Insured Section -->
@@ -97,7 +137,9 @@
           <span class="info-label">Producer*</span>
         </div>
         <div class="producer-details">
-          <textarea class="producer-textarea" readonly>{{ taskDetail()?.producer }}</textarea>
+          <textarea class="producer-textarea" 
+                    [readonly]="!isEditMode()"
+                    (change)="onFieldChange()">{{ taskDetail()?.producer }}</textarea>
         </div>
         
         <div class="info-row">
@@ -112,7 +154,8 @@
               <input type="text" 
                      class="form-input" 
                      [value]="taskDetail()?.naicsOccupancyCode" 
-                     readonly>
+                     [readonly]="!isEditMode()"
+                     (change)="onFieldChange()">
               <button class="lookup-btn">TUG</button>
             </div>
           </div>
@@ -124,7 +167,8 @@
             <input type="text" 
                    class="form-input" 
                    [value]="taskDetail()?.sicCode" 
-                   readonly>
+                   [readonly]="!isEditMode()"
+                   (change)="onFieldChange()">
           </div>
         </div>
 
@@ -133,6 +177,8 @@
             <label class="form-label">Business Description*</label>
             <textarea class="form-textarea" 
                       [value]="taskDetail()?.businessDescription" 
+                      [readonly]="!isEditMode()"
+                      (change)="onFieldChange()"
                       placeholder="-"></textarea>
           </div>
         </div>
@@ -145,7 +191,8 @@
               <input type="text" 
                      class="form-input" 
                      [value]="taskDetail()?.naicsOccupancyCode" 
-                     readonly>
+                     [readonly]="!isEditMode()"
+                     (change)="onFieldChange()">
               <button class="lookup-btn">TUG</button>
             </div>
           </div>
@@ -157,7 +204,362 @@
             <input type="text" 
                    class="form-input" 
                    [value]="taskDetail()?.sicCode" 
-                   readonly>
+                   [readonly]="!isEditMode()"
+                   (change)="onFieldChange()">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Supplementary Info Section -->
+    <section class="supplementary-info-section" *ngIf="!isLoading() && activeSection() === 'supplementary-info'">
+      <h1 class="section-title">Supplementary Info</h1>
+      
+      <div class="info-group" *ngIf="taskDetail()">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Policy Effective Date*</label>
+            <input type="date" 
+                   class="form-input" 
+                   value="2024-01-01"
+                   [readonly]="!isEditMode()"
+                   (change)="onFieldChange()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Policy Expiry Date*</label>
+            <input type="date" 
+                   class="form-input" 
+                   value="2025-01-01"
+                   [readonly]="!isEditMode()"
+                   (change)="onFieldChange()">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Renewal Status</label>
+            <select class="form-input" 
+                    [disabled]="!isEditMode()"
+                    (change)="onFieldChange()">
+              <option>New Business</option>
+              <option>Renewal</option>
+              <option>Mid-term Change</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Previous Carrier</label>
+            <input type="text" 
+                   class="form-input" 
+                   placeholder="Enter previous carrier name"
+                   [readonly]="!isEditMode()"
+                   (change)="onFieldChange()">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label class="form-label">Risk Assessment Notes</label>
+            <textarea class="form-textarea" 
+                      rows="4" 
+                      placeholder="Enter risk assessment details..."
+                      [readonly]="!isEditMode()"
+                      (change)="onFieldChange()"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Loss History (Years)</label>
+            <input type="number" 
+                   class="form-input" 
+                   value="5"
+                   [readonly]="!isEditMode()"
+                   (change)="onFieldChange()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Total Claims</label>
+            <input type="number" 
+                   class="form-input" 
+                   value="2"
+                   [readonly]="!isEditMode()"
+                   (change)="onFieldChange()">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Exposures Section -->
+    <section class="pricing-exposures-section" *ngIf="!isLoading() && activeSection() === 'pricing-exposures'">
+      <h1 class="section-title">Pricing Exposures</h1>
+      
+      <div class="info-group" *ngIf="taskDetail()">
+        <div class="exposure-grid">
+          <div class="exposure-card">
+            <h3>Property Exposure</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Building Value</label>
+                <input type="text" class="form-input" value="$2,500,000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Contents Value</label>
+                <input type="text" class="form-input" value="$500,000">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Deductible</label>
+                <select class="form-input">
+                  <option>$1,000</option>
+                  <option selected>$2,500</option>
+                  <option>$5,000</option>
+                  <option>$10,000</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="exposure-card">
+            <h3>Liability Exposure</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">General Liability Limit</label>
+                <select class="form-input">
+                  <option>$1,000,000</option>
+                  <option selected>$2,000,000</option>
+                  <option>$5,000,000</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Aggregate Limit</label>
+                <select class="form-input">
+                  <option>$2,000,000</option>
+                  <option selected>$4,000,000</option>
+                  <option>$10,000,000</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="exposure-card">
+            <h3>Additional Coverages</h3>
+            <div class="coverage-list">
+              <label class="checkbox-label">
+                <input type="checkbox" checked> Business Interruption
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" checked> Equipment Breakdown
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox"> Cyber Liability
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox"> Employment Practices
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Policy Setup Section -->
+    <section class="policy-setup-section" *ngIf="!isLoading() && activeSection() === 'policy-setup'">
+      <h1 class="section-title">Policy Setup</h1>
+      
+      <div class="info-group" *ngIf="taskDetail()">
+        <div class="setup-card">
+          <h3>Policy Configuration</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Policy Type*</label>
+              <select class="form-input">
+                <option>Commercial Package Policy</option>
+                <option>Business Owners Policy</option>
+                <option>General Liability Only</option>
+                <option>Property Only</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Payment Plan*</label>
+              <select class="form-input">
+                <option>Annual</option>
+                <option>Semi-Annual</option>
+                <option>Quarterly</option>
+                <option>Monthly</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Commission Rate (%)</label>
+              <input type="number" class="form-input" value="15" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Broker Fee</label>
+              <input type="text" class="form-input" value="$250">
+            </div>
+          </div>
+        </div>
+
+        <div class="setup-card">
+          <h3>Forms & Endorsements</h3>
+          <div class="endorsement-list">
+            <div class="endorsement-item">
+              <span class="endorsement-code">CG 20 10</span>
+              <span class="endorsement-name">Additional Insured - Owners, Lessees</span>
+              <button class="remove-btn">✕</button>
+            </div>
+            <div class="endorsement-item">
+              <span class="endorsement-code">CG 20 37</span>
+              <span class="endorsement-name">Additional Insured - Contractors</span>
+              <button class="remove-btn">✕</button>
+            </div>
+            <div class="endorsement-item">
+              <span class="endorsement-code">CG 24 04</span>
+              <span class="endorsement-name">Waiver of Subrogation</span>
+              <button class="remove-btn">✕</button>
+            </div>
+          </div>
+          <button class="add-endorsement-btn">+ Add Endorsement</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Manage Pricing Section -->
+    <section class="manage-pricing-section" *ngIf="!isLoading() && activeSection() === 'manage-pricing'">
+      <h1 class="section-title">Manage Pricing</h1>
+      
+      <div class="info-group" *ngIf="taskDetail()">
+        <div class="pricing-summary">
+          <h3>Premium Calculation</h3>
+          <table class="pricing-table">
+            <thead>
+              <tr>
+                <th>Coverage</th>
+                <th>Base Premium</th>
+                <th>Modifications</th>
+                <th>Final Premium</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Property</td>
+                <td>$12,500</td>
+                <td>
+                  <span class="mod-factor">Schedule Mod: 0.95</span>
+                </td>
+                <td class="premium-amount">$11,875</td>
+              </tr>
+              <tr>
+                <td>General Liability</td>
+                <td>$8,750</td>
+                <td>
+                  <span class="mod-factor">Experience Mod: 1.10</span>
+                </td>
+                <td class="premium-amount">$9,625</td>
+              </tr>
+              <tr>
+                <td>Business Interruption</td>
+                <td>$3,200</td>
+                <td>-</td>
+                <td class="premium-amount">$3,200</td>
+              </tr>
+              <tr>
+                <td>Equipment Breakdown</td>
+                <td>$1,800</td>
+                <td>-</td>
+                <td class="premium-amount">$1,800</td>
+              </tr>
+              <tr class="total-row">
+                <td colspan="3"><strong>Total Annual Premium</strong></td>
+                <td class="premium-total"><strong>$26,500</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pricing-adjustments">
+          <h3>Premium Adjustments</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Discretionary Credit/Debit (%)</label>
+              <input type="number" class="form-input" value="0" min="-25" max="25" step="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Justification</label>
+              <input type="text" class="form-input" placeholder="Enter reason for adjustment">
+            </div>
+          </div>
+          <button class="recalculate-btn">Recalculate Premium</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- UW Rationale Section -->
+    <section class="uw-rationale-section" *ngIf="!isLoading() && activeSection() === 'uw-rationale'">
+      <h1 class="section-title">Underwriting Rationale</h1>
+      
+      <div class="info-group" *ngIf="taskDetail()">
+        <div class="rationale-card">
+          <h3>Risk Assessment</h3>
+          <div class="risk-factors">
+            <div class="risk-item">
+              <span class="risk-label">Overall Risk Score:</span>
+              <span class="risk-score medium">Medium (65/100)</span>
+            </div>
+            <div class="risk-item">
+              <span class="risk-label">Industry Risk:</span>
+              <span class="risk-value">Moderate - Retail operations</span>
+            </div>
+            <div class="risk-item">
+              <span class="risk-label">Location Risk:</span>
+              <span class="risk-value">Low - Non-catastrophe zone</span>
+            </div>
+            <div class="risk-item">
+              <span class="risk-label">Claims History:</span>
+              <span class="risk-value">Favorable - 2 minor claims in 5 years</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rationale-card">
+          <h3>Underwriting Decision</h3>
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label class="form-label">Decision Summary</label>
+              <textarea class="form-textarea" rows="4">Account acceptable for binding. Client demonstrates good risk management practices with updated sprinkler systems and security measures. Loss history is within acceptable parameters. Recommend standard terms with scheduled equipment.</textarea>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label class="form-label">Conditions & Recommendations</label>
+              <textarea class="form-textarea" rows="3">1. Annual property inspection required
+2. Maintain current security systems
+3. Review coverage limits at renewal</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="rationale-card">
+          <h3>Approval Status</h3>
+          <div class="approval-section">
+            <div class="approval-item">
+              <span class="approval-label">Underwriter:</span>
+              <span class="approval-value">Jane Smith</span>
+              <span class="approval-status approved">✓ Approved</span>
+            </div>
+            <div class="approval-item">
+              <span class="approval-label">Manager Review:</span>
+              <span class="approval-value">Not Required</span>
+              <span class="approval-status">-</span>
+            </div>
+            <div class="approval-item">
+              <span class="approval-label">Referral Status:</span>
+              <span class="approval-value">None</span>
+              <span class="approval-status">-</span>
+            </div>
           </div>
         </div>
       </div>
