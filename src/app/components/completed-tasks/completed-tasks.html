@@ -29,20 +29,41 @@
       <table class="tasks-table" *ngIf="completedTasks().length > 0; else noCompletedTasks">
         <thead>
           <tr>
-            <th>Account Name</th>
-            <th>NAIC Description</th>
-            <th>LOB/Products</th>
-            <th>Transaction Type</th>
-            <th>Propensity to bind</th>
-            <th>Premium</th>
-            <th>Completed Date</th>
-            <th>Status</th>
+            <th class="flag-column">
+              🚩 ↕ 🔽
+            </th>
+            <th class="sortable">
+              Account Name ↕ 🔽
+            </th>
+            <th class="sortable">
+              NAIC Description ↕ 🔽
+            </th>
+            <th class="sortable">
+              LOB/Products ↕ 🔽
+            </th>
+            <th class="sortable">
+              Transaction Type ↕ 🔽
+            </th>
+            <th class="sortable">
+              Propensity to bind ↕ 🔽
+            </th>
+            <th class="sortable">
+              Premium ↕ 🔽
+            </th>
+            <th class="sortable">
+              Completed Date ↕ 🔽
+            </th>
+            <th class="sortable compact" style="width: 80px;">
+              Status ↕ 🔽
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let task of completedTasks()" class="task-row completed-row">
+            <td class="flag-column">
+              <div class="priority-flag" *ngIf="task.priority">🚩</div>
+            </td>
             <td class="account-name">
-              <div class="priority-flag" *ngIf="task.priority">🏳️</div>
               <div class="task-info">
                 <span class="task-name">{{ task.accountName }}</span>
                 <small class="task-id">

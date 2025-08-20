@@ -1,20 +1,4 @@
 <div class="tasks-container">
-  <!-- Header Section -->
-  <header class="header">
-    <div class="header-content">
-      <div class="logo-section">
-        <span class="logo">UW Hub</span>
-      </div>
-      <nav class="nav">
-        <a routerLink="/" class="nav-link">Home</a>
-        <a routerLink="/tasks" class="nav-link active">Tasks</a>
-      </nav>
-      <div class="user-section">
-        <span class="user-name">Jane Smith</span>
-        <div class="user-dropdown">▼</div>
-      </div>
-    </div>
-  </header>
 
   <!-- Tasks Page Content -->
   <div class="tasks-content">
@@ -70,77 +54,51 @@
 
     <!-- Tasks Table -->
     <div class="tasks-table-container">
-      <table class="tasks-table" *ngIf="getCurrentTasks().length > 0; else noTasks">
+      <table class="tasks-table" [class.team-view]="viewMode() === 'team'" *ngIf="getCurrentTasks().length > 0; else noTasks">
         <thead>
           <tr>
-            <th class="sortable">
-              <span class="header-content">
-                <span class="header-icon">🏳️</span>
-                Account Name
-                <span class="sort-icons">↕</span>
-              </span>
+            <th class="flag-column">
+              🚩
             </th>
             <th class="sortable">
-              <span class="header-content">
-                NAIC Description
-                <span class="sort-icons">↕</span>
-              </span>
+              Account Name ↕ 🔽
             </th>
             <th class="sortable">
-              <span class="header-content">
-                LOB/Products
-                <span class="sort-icons">↕</span>
-              </span>
+              NAIC Description ↕ 🔽
             </th>
             <th class="sortable">
-              <span class="header-content">
-                Transaction type
-                <span class="sort-icons">↕</span>
-              </span>
+              LOB/Products ↕ 🔽
             </th>
             <th class="sortable">
-              <span class="header-content">
-                Propensity to bind
-                <span class="sort-icons">↕</span>
-              </span>
+              Transaction type ↕ 🔽
             </th>
             <th class="sortable">
-              <span class="header-content">
-                Status
-                <span class="sort-icons">↕</span>
-              </span>
+              Propensity to bind ↕ 🔽
             </th>
             <th class="sortable">
-              <span class="header-content">
-                Target action date
-                <span class="sort-icons">↕</span>
-              </span>
+              Status ↕ 🔽
             </th>
             <th class="sortable">
-              <span class="header-content">
-                Pending action
-                <span class="sort-icons">↕</span>
-              </span>
+              Target action date ↕ 🔽
             </th>
             <th class="sortable">
-              <span class="header-content">
-                Premium
-                <span class="sort-icons">↕</span>
-              </span>
+              Pending action ↕ 🔽
+            </th>
+            <th class="sortable">
+              Premium ↕ 🔽
             </th>
             <th class="sortable" *ngIf="viewMode() === 'team'">
-              <span class="header-content">
-                Assigned To
-                <span class="sort-icons">↕</span>
-              </span>
+              Assigned To ↕ 🔽
             </th>
-            <th class="pin-column">Pin</th>
+            <th class="pin-column compact" style="width: 50px;">Pin</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let task of getCurrentTasks()" class="task-row">
+            <td class="flag-column">
+              <div class="priority-flag" *ngIf="task.priority">🚩</div>
+            </td>
             <td class="account-name">
-              <div class="priority-flag" *ngIf="task.priority">🏳️</div>
               <a [routerLink]="['/task-detail', task.id]" class="task-link">
                 {{ task.accountName }}<br>
                 <small class="task-id">{{ task.id }}</small>

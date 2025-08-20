@@ -1,0 +1,176 @@
+// Dashboard Component Styles
+
+// Override table container to prevent horizontal scroll
+.tasks-table-container {
+  overflow-x: visible !important; // Remove horizontal scroll
+  overflow-y: visible;
+}
+
+// Make table fit the container width
+.tasks-table {
+  width: 100% !important;
+  min-width: auto !important; // Remove min-width constraint
+  table-layout: fixed; // Use fixed table layout for better control
+  
+  // Adjust column widths for optimal space usage
+  th, td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    // Column width distribution
+    &:nth-child(1) { // Account Name
+      width: 22%;
+    }
+    &:nth-child(2) { // NAIC Description
+      width: 20%;
+    }
+    &:nth-child(3) { // LOB/Products
+      width: 18%;
+    }
+    &:nth-child(4) { // Propensity to bind
+      width: 12%;
+    }
+    &:nth-child(5) { // Target action date
+      width: 12%;
+    }
+    &:nth-child(6) { // Pending action
+      width: 16%;
+    }
+  }
+  
+  // Make text in cells more compact
+  td {
+    font-size: 13px;
+    padding: 12px 8px;
+    
+    // Account name column specific styles
+    &.account-name {
+      .task-link {
+        display: block;
+        line-height: 1.3;
+        
+        small {
+          font-size: 11px;
+          display: block;
+          margin-top: 2px;
+        }
+      }
+    }
+    
+    // NAIC Description column
+    &.naic-desc {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    
+    // LOB/Products column
+    &.lob-products {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    
+    // Target date column
+    &.target-date {
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    
+    // Pending action column
+    &.pending-action {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  }
+  
+  // Make headers more compact
+  th {
+    font-size: 11px;
+    padding: 10px 8px;
+    white-space: normal;
+    line-height: 1.3;
+  }
+}
+
+// Ensure propensity badges don't break layout
+.propensity-badge {
+  font-size: 11px;
+  padding: 3px 6px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+// Priority flag adjustments
+.priority-flag {
+  font-size: 14px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+// Header content styles for flag icon
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  .header-icon {
+    font-size: 12px;
+  }
+}
+
+// Responsive adjustments for smaller screens
+@media (max-width: 1400px) {
+  .tasks-table {
+    td {
+      font-size: 12px;
+      padding: 10px 6px;
+      
+      &.account-name .task-link small {
+        font-size: 10px;
+      }
+    }
+    
+    th {
+      font-size: 10px;
+      padding: 8px 6px;
+    }
+  }
+  
+  .propensity-badge {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .tasks-table {
+    // Adjust column widths for medium screens
+    th, td {
+      &:nth-child(1) { width: 24%; }
+      &:nth-child(2) { width: 18%; }
+      &:nth-child(3) { width: 16%; }
+      &:nth-child(4) { width: 14%; }
+      &:nth-child(5) { width: 13%; }
+      &:nth-child(6) { width: 15%; }
+    }
+  }
+}
+
+// Hide certain columns on very small screens if needed
+@media (max-width: 1024px) {
+  .tasks-table {
+    // Hide LOB/Products column on smaller screens to save space
+    th:nth-child(3),
+    td:nth-child(3) {
+      display: none;
+    }
+    
+    // Redistribute widths
+    th, td {
+      &:nth-child(1) { width: 30%; }
+      &:nth-child(2) { width: 25%; }
+      &:nth-child(4) { width: 15%; }
+      &:nth-child(5) { width: 15%; }
+      &:nth-child(6) { width: 15%; }
+    }
+  }
+}
