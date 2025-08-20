@@ -237,7 +237,7 @@ body {
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 20px;
+  padding: 0 20px 24px 20px;
 }
 
 /* Cards Grid */
@@ -487,7 +487,7 @@ body {
 .tasks-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 24px 20px;
+  padding: 0 20px 24px 20px;
 }
 
 .page-header {
@@ -514,7 +514,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 14px 40px;
   border: none;
   border-radius: 8px;
   background: white;
@@ -523,6 +523,8 @@ body {
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  justify-content: center;
   
   &:hover {
     background-color: var(--gray-50);
