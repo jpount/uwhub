@@ -1,16 +1,49 @@
-/* Table Container - Remove horizontal scroll */
+/* Table Container */
 .tasks-table-container {
-  overflow-x: visible !important;
-  overflow-y: visible;
   width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  
+  /* Desktop - no scroll */
+  @media (min-width: 769px) {
+    overflow-x: visible !important;
+  }
+  
+  /* Mobile portrait - enable horizontal scroll */
+  @media (max-width: 768px) and (orientation: portrait) {
+    overflow-x: auto !important;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -8px; /* Extend to screen edges */
+    padding: 0 8px;
+  }
 }
 
-/* Table Styles - Fit screen width */
+/* Table Styles */
 .tasks-table {
-  width: 100% !important;
-  min-width: auto !important;
-  table-layout: fixed;
+  width: 100%;
+  table-layout: auto;
   border-collapse: collapse;
+  
+  /* Desktop - fixed layout */
+  @media (min-width: 769px) {
+    table-layout: fixed;
+    min-width: auto !important;
+  }
+  
+  /* Mobile portrait - minimum width for readability */
+  @media (max-width: 768px) and (orientation: portrait) {
+    min-width: 900px !important; /* Ensure table is wide enough to be readable */
+    table-layout: auto;
+  }
+  
+  /* Mobile landscape - try to fit */
+  @media (max-width: 768px) and (orientation: landscape) {
+    width: 100% !important;
+    min-width: auto !important;
+    table-layout: fixed;
+  }
   
   /* Column width distribution */
   th, td {
@@ -260,7 +293,7 @@
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1200px) and (min-width: 769px) {
   .tasks-table {
     /* Hide LOB/Products column on smaller screens */
     th:nth-child(4),
@@ -281,6 +314,60 @@
       &:nth-child(10) { width: 8%; }
       &:nth-child(11) { width: 12%; }
       &:nth-child(12) { width: 3%; }
+    }
+  }
+}
+
+/* Mobile Portrait Specific */
+@media (max-width: 768px) and (orientation: portrait) {
+  .tasks-table {
+    /* Keep all columns visible with minimum widths */
+    th, td {
+      white-space: nowrap;
+      min-width: auto;
+      padding: 10px 12px;
+      
+      &:nth-child(1) { min-width: 40px; } /* Flag */
+      &:nth-child(2) { min-width: 150px; } /* Account Name */
+      &:nth-child(3) { min-width: 140px; } /* NAIC Description */
+      &:nth-child(4) { min-width: 120px; } /* LOB/Products */
+      &:nth-child(5) { min-width: 100px; } /* Transaction type */
+      &:nth-child(6) { min-width: 100px; } /* Propensity */
+      &:nth-child(7) { min-width: 80px; } /* Status */
+      &:nth-child(8) { min-width: 100px; } /* Target date */
+      &:nth-child(9) { min-width: 120px; } /* Pending action */
+      &:nth-child(10) { min-width: 80px; } /* Premium */
+      &:nth-child(11) { min-width: 100px; } /* Assigned To */
+      &:nth-child(12) { min-width: 40px; } /* Pin */
+    }
+    
+    td {
+      font-size: 13px;
+      
+      &.account-name,
+      &.naic-desc,
+      &.lob-products,
+      &.pending-action {
+        white-space: normal;
+        word-break: break-word;
+      }
+    }
+  }
+  
+  /* Add visual indicator for scrollable area */
+  .tasks-table-container {
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 30px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.8));
+      pointer-events: none;
+      z-index: 1;
     }
   }
 }
