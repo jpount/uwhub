@@ -1472,6 +1472,7 @@ body {
   .hero-image {
     height: 100%;
     top: 0;
+    border-top: 4px solid #000; /* Ensure black border */
     
     img {
       object-position: center bottom;
@@ -1479,13 +1480,15 @@ body {
   }
   
   .hero {
-    width: 85%;
+    width: 75%; /* Reduced width to show more black border */
     padding: 8px 12px;
     position: absolute;
     top: auto;
-    bottom: 0;
+    bottom: 0; /* Align to bottom with image */
+    left: 0; /* Align to left edge */
     height: auto;
-    min-height: 60px;
+    min-height: 50px;
+    max-height: calc(100% - 12px); /* Ensure it doesn't exceed container with black border */
   }
   
   .hero-title {
@@ -1670,6 +1673,7 @@ body {
   .hero-image {
     height: 100%;
     top: 0;
+    border-top: 4px solid #000; /* Ensure black border */
     
     img {
       object-position: center bottom;
@@ -1677,13 +1681,15 @@ body {
   }
   
   .hero {
-    width: 90%;
+    width: 70%; /* Further reduced for smaller screens */
     padding: 6px 10px;
     position: absolute;
     top: auto;
-    bottom: 0;
+    bottom: 0; /* Align to bottom with image */
+    left: 0; /* Align to left edge */
     height: auto;
-    min-height: 50px;
+    min-height: 45px;
+    max-height: calc(100% - 10px); /* Ensure it doesn't exceed container with black border */
   }
   
   .hero-title {
@@ -1783,6 +1789,27 @@ body {
 @media (max-height: 568px) and (orientation: landscape) {
   .hero-container {
     min-height: 60px;
+    position: relative;
+  }
+  
+  .hero-image {
+    height: 100%;
+    top: 0;
+    
+    img {
+      object-position: center bottom;
+    }
+  }
+  
+  .hero {
+    position: absolute;
+    bottom: 0; /* Align to bottom */
+    top: auto;
+    left: 0;
+    width: 65%;
+    height: auto;
+    min-height: 40px;
+    padding: 6px 12px;
   }
   
   .hero-title {
@@ -1801,6 +1828,29 @@ body {
   .cards-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+  }
+}
+
+/* Mobile Landscape Mode (any mobile device in landscape) */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero-container {
+    position: relative;
+  }
+  
+  .hero {
+    position: absolute;
+    bottom: 0; /* Force bottom alignment */
+    top: auto;
+    left: 0;
+    width: 65%;
+    height: auto;
+    padding: 8px 16px;
+  }
+  
+  .hero-image {
+    img {
+      object-position: center bottom;
+    }
   }
 }
 
