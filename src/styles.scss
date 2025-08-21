@@ -421,6 +421,11 @@ body {
   margin-right: 8px;
 }
 
+/* Align last column (Status) to left */
+.tasks-table td:last-child {
+  text-align: left;
+}
+
 /* Status Badges */
 .propensity-badge, .status-badge {
   padding: 4px 8px;
